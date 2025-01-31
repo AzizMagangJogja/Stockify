@@ -25,6 +25,15 @@ class AttributeRepository {
     public function deleteAttribute($attribute) {
         return $attribute->delete();
     }
+
+    public function searchAttribute(string $keyword, $perPage = 20) {
+        return ProductAttributes::with(['product'])->where('name', 'LIKE', "%{$keyword}%")
+            ->orWhere('value', 'LIKE', "%{$keyword}%")
+            ->orWhereHas('product', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->paginate($perPage);
+    }
 }
 
 class UserActivityRepository {

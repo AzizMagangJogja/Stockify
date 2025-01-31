@@ -90,4 +90,8 @@ class AttributeService {
 
         return $attribute;
     }
+
+    public function searchAttribute(string $keyword, $perPage = 20) {
+        return $this->attributeRepository->searchAttribute($keyword, $perPage);
+    }
 }

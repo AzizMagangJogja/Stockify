@@ -22,8 +22,14 @@ class CategoriesRepository {
         return $category->update($data);
     }
 
-    public function deleteCategory ($category) {
+    public function deleteCategory($category) {
         return $category->delete();
+    }
+
+    public function searchCategory(string $keyword, $perPage = 20) {
+        return Categories::where('name', 'LIKE', "%{$keyword}%")
+            ->orWhere('description', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
     }
 }
 

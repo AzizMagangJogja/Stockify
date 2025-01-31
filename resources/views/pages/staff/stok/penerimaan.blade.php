@@ -6,7 +6,7 @@
     <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
         <div class="p-3 bg-white block sm:flex items-center justify-between border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
             <div class="w-full mb-1">
-                <div>
+                <div class="mb-4">
                     <nav class="flex mb-5" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                             <li class="inline-flex items-center">
@@ -70,6 +70,17 @@
                     
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Penerimaan Barang</h1>
                 </div>
+
+                <div class="sm:flex">
+                    <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
+                        <form class="lg:pr-3" action="{{ route('staff.stock.penerimaan.index') }}" method="GET">
+                            <label for="users-search" class="sr-only">Search</label>
+                            <div class="relative mt-1 lg:w-64 xl:w-96">
+                            <input type="text" name="search" value="{{ request('search') }}" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Produk" onkeydown="if (event.key === 'Enter') { this.form.submit(); }"/>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -89,28 +100,36 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach($masuk as $terima)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $terima->product->name }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $terima->quantity }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($terima->date)->locale('id')->translatedFormat('d F Y') }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">
-                                            {{ $terima->status }}
-                                        </span>
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-whit text-center align-middlee">{{ $terima->notes ?? '-' }}</td>
-                                    <td class="p-4 whitespace-nowrap text-center align-middle">
-                                        <button  type="button" data-modal-target="konfirmasi-modal-{{ $terima->id }}" data-modal-toggle="konfirmasi-modal-{{ $terima->id }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-all duration-200 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 rounded-lg shadow-md hover:from-primary-600 hover:to-primary-800 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-700">
-                                            <svg class="w-4 h-4 mr-2 animate-pulse" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-                                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            Konfirmasi
-                                        </button>
-                                    </td>                                    
-                                </tr>
-                                @endforeach
+                                @if ($masuk->isEmpty())
+                                    <tr>
+                                        <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                            ~Tidak ada transaksi~
+                                        </td>
+                                    </tr>
+                                @else     
+                                    @foreach($masuk as $terima)
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $terima->product->name }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $terima->quantity }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($terima->date)->locale('id')->translatedFormat('d F Y') }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">
+                                                {{ $terima->status }}
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-whit text-center align-middlee">{{ $terima->notes ?? '-' }}</td>
+                                        <td class="p-4 whitespace-nowrap text-center align-middle">
+                                            <button  type="button" data-modal-target="konfirmasi-modal-{{ $terima->id }}" data-modal-toggle="konfirmasi-modal-{{ $terima->id }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition-all duration-200 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 rounded-lg shadow-md hover:from-primary-600 hover:to-primary-800 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-700">
+                                                <svg class="w-4 h-4 mr-2 animate-pulse" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                Konfirmasi
+                                            </button>
+                                        </td>                                    
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

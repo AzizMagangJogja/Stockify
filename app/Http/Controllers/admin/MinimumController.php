@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\MinimumService;
@@ -16,9 +15,12 @@ class MinimumController extends Controller
         $this->minimumService = $minimumService;
     }
 
-    public function index()
+    public function index(Request $request)
     { 
-        $minimum = $this->minimumService->getPaginatedMinimum();
+        $keyword = $request->get('search');
+        $minimum = $keyword 
+            ? $this->minimumService->searchMinimum($keyword) 
+            : $this->minimumService->getPaginatedMinimum();
         return view('pages.admin.stok.minimum', compact('minimum'));
     }
 

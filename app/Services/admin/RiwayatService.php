@@ -26,4 +26,8 @@ class RiwayatService {
         
         return $transactions;
     }
+
+    public function searchRiwayat(string $keyword, $perPage = 20) {
+        return $this->riwayatRepository->searchRiwayat($keyword, $perPage);
+    }
 }

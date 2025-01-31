@@ -14,4 +14,8 @@ class SupplierService {
     public function getPaginatedSupplier($perPage = 20) {
         return $this->supplierRepository->paginateSupplier($perPage);
     }
+
+    public function searchSupplier(string $keyword, $perPage = 20) {
+        return $this->supplierRepository->searchSupplier($keyword, $perPage);
+    }
 }

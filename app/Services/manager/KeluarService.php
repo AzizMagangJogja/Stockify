@@ -106,4 +106,8 @@ class KeluarService {
     public function findKeluarById($id) {
         return $this->keluarRepository->findKeluarById($id);
     }
+
+    public function searchKeluar(string $keyword, $perPage = 20) {
+        return $this->keluarRepository->searchKeluar($keyword, $perPage);
+    }
 }

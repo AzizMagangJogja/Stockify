@@ -14,7 +14,6 @@ class DummyStockTransactionsSeeder extends Seeder
     {
         $stockTransactionData=[
             [
-                'id'=>'1',
                 'product_id'=>'1',
                 'user_id'=>'3',
                 'type'=>'Masuk',
@@ -23,7 +22,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Barang sedang dicek oleh staff.'
             ], [
-                'id'=>'2',
                 'product_id'=>'2',
                 'user_id'=>'2',
                 'type'=>'Keluar',
@@ -32,7 +30,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Sedang menunggu konfirmasi pengiriman oleh staff.'
             ], [
-                'id'=>'3',
                 'product_id'=>'3',
                 'user_id'=>'3',
                 'type'=>'Masuk',
@@ -41,7 +38,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Sedang menunggu konfirmasi pengecekan oleh staff.'
             ], [
-                'id'=>'4',
                 'product_id'=>'4',
                 'user_id'=>'2',
                 'type'=>'Keluar',
@@ -50,7 +46,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Barang sedang disiapkan oleh staff untuk dikirim ke cabang Jakarta.'
             ], [
-                'id'=>'5',
                 'product_id'=>'5',
                 'user_id'=>'3',
                 'type'=>'Masuk',
@@ -59,7 +54,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Barang sedang dicek oleh staff.'
             ], [
-                'id'=>'6',
                 'product_id'=>'6',
                 'user_id'=>'2',
                 'type'=>'Keluar',
@@ -68,7 +62,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Pembeli hilang kontak.'
             ], [
-                'id'=>'7',
                 'product_id'=>'7',
                 'user_id'=>'3',
                 'type'=>'Masuk',
@@ -77,7 +70,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Barang sedang dicek oleh staff dengan pesanan dalam jumlah besar diterima.'
             ], [
-                'id'=>'8',
                 'product_id'=>'8',
                 'user_id'=>'2',
                 'type'=>'Keluar',
@@ -86,7 +78,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Sedang dalam proses persiapan oleh staff.'
             ], [
-                'id'=>'9',
                 'product_id'=>'9',
                 'user_id'=>'3',
                 'type'=>'Masuk',
@@ -95,7 +86,6 @@ class DummyStockTransactionsSeeder extends Seeder
                 'status'=>'Pending',
                 'notes'=>'Pengadaan barang baru.'
             ], [
-                'id'=>'10',
                 'product_id'=>'10',
                 'user_id'=>'2',
                 'type'=>'Keluar',

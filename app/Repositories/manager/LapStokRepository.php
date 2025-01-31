@@ -3,8 +3,13 @@
 namespace App\Repositories\Manager;
 
 use App\Models\Products;
+use App\Models\UserActivity;
 
 class LapStokRepository {
+    public function create(array $data) {
+        return UserActivity::create($data);
+    }
+    
     public function paginateLapStok($filters = [], $perPage = 20) {
         $query = Products::query();
 

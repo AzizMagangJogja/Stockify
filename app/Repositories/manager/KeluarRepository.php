@@ -25,6 +25,16 @@ class KeluarRepository {
     public function deleteKeluar($keluar) {
         return $keluar->delete();
     }
+
+    public function searchKeluar(string $keyword, $perPage = 20) {
+        return StockTransaction::with(['product'])
+            ->where('type', 'Keluar')
+            ->where('status', 'Pending')
+            ->whereHas('product', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->paginate($perPage);
+    }
 }
 
 class UserActivityRepository {

@@ -55,11 +55,11 @@
 
                 <div class="sm:flex">
                     <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-                        <form class="lg:pr-3" action="#" method="GET">
+                        <form class="lg:pr-3" action="{{ route('admin.stock.riwayat') }}" method="GET">
                             <label for="users-search" class="sr-only">Search</label>
                             <div class="relative mt-1 lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Riwayat Transaksi">
-                            </div>
+                            <input type="text" name="search" value="{{ request('search') }}" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Data Riwayat Transaksi" onkeydown="if (event.key === 'Enter') { this.form.submit(); }"/>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -83,33 +83,41 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach($stoktransaction as $st)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->product->name }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($st->type === 'Masuk')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
-                                        @elseif ($st->type === 'Keluar')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
-                                        @endif
+                                @if ($stoktransaction->isEmpty())
+                                <tr>
+                                    <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                        ~Tidak ada riwayat transaksi~
                                     </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->quantity }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">Rp. {{ number_format($st->total_price) }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($st->date)->locale('id')->translatedFormat('d F Y') }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($st->status === 'Pending')
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">Pending</span>
-                                        @elseif ($st->status === 'Diterima')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Diterima</span>
-                                        @elseif ($st->status === 'Ditolak')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Ditolak</span>
-                                        @elseif ($st->status === 'Dikeluarkan')
-                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">Dikeluarkan</span>
-                                        @endif
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->notes }}</td>
                                 </tr>
-                                @endforeach
+                                @else
+                                    @foreach($stoktransaction as $st)
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->product->name }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($st->type === 'Masuk')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
+                                            @elseif ($st->type === 'Keluar')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
+                                            @endif
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->quantity }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">Rp. {{ number_format($st->total_price) }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($st->date)->locale('id')->translatedFormat('d F Y') }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($st->status === 'Pending')
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">Pending</span>
+                                            @elseif ($st->status === 'Diterima')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Diterima</span>
+                                            @elseif ($st->status === 'Ditolak')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Ditolak</span>
+                                            @elseif ($st->status === 'Dikeluarkan')
+                                                <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">Dikeluarkan</span>
+                                            @endif
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $st->notes }}</td>
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

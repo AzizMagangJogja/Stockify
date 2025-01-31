@@ -25,6 +25,11 @@ class SupplierRepository {
     public function deleteSupplier($supplier) {
         return $supplier->delete();
     }
+
+    public function searchSupplier(string $keyword, $perPage = 20) {
+        return Supplier::where('name', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
+    }
 }
 
 class UserActivityRepository {

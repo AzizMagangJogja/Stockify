@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\OpnameController;
 use App\Http\Controllers\Admin\LapStokController;
@@ -66,8 +65,8 @@ Route::middleware(['auth'])->group(function() {
         Route::name('produk.')->group(function () {
             Route::get('/produk', [ProductController::class, 'index'])->name('produk');
             Route::resource('produk', ProductController::class);
-            Route::get('/export-produk', [ExportController::class, 'exportProduk'])->name('export');
-            Route::post('/import-produk', [ImportController::class, 'import'])->name('import');
+            Route::post('/import-produk', [ProductController::class, 'import'])->name('import');
+            Route::get('/export-produk', [ProductController::class, 'exportProduk'])->name('export-produk');
 
             Route::get('/kategori', [CategoriesController::class, 'index'])->name('kategori');
             Route::resource('kategori', CategoriesController::class);
@@ -93,13 +92,13 @@ Route::middleware(['auth'])->group(function() {
 
         Route::name('laporan.')->group(function () {
             Route::get('/laporan-stock', [LapStokController::class, 'index'])->name('stok');
-            Route::get('/export-lapstok', [ExportController::class, 'exportLapStok'])->name('export.lapstok');
+            Route::get('/export-lapstok', [LapStokController::class, 'exportLapStok'])->name('export-lapstok');
 
             Route::get('/laporan-transaksi', [LapTransController::class, 'index'])->name('transaksi');
-            Route::get('/export-laptrans', [ExportController::class, 'exportLapTrans'])->name('export.laptrans');
+            Route::get('/export-laptrans', [LapTransController::class, 'exportLapTrans'])->name('export-laptrans');
 
             Route::get('/laporan-pengguna', [LapAktivitasController::class, 'index'])->name('pengguna');
-            Route::get('/export-lapaktivitas', [ExportController::class, 'exportLapAktivitas'])->name('export.lapaktivitas');
+            Route::get('/export-lapaktivitas', [LapAktivitasController::class, 'exportLapAktivitas'])->name('export-lapaktivitas');
         });
 
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
@@ -111,6 +110,7 @@ Route::middleware(['auth'])->group(function() {
 
         Route::get('produk', [ProdukController::class, 'index'])->name('produk');
         Route::resource('produk', ProdukController::class);
+        Route::get('/export-produk', [ProdukController::class, 'exportProduk'])->name('export-produk');
 
         Route::name('stock.')->group(function () {
             Route::get('/transaksi-masuk', [MasukController::class, 'index'])->name('masuk');
@@ -126,8 +126,10 @@ Route::middleware(['auth'])->group(function() {
 
         Route::name('laporan.')->group(function () {
             Route::get('/laporan-stock', [LapStokmController::class, 'index'])->name('stok');
+            Route::get('/export-lapstok', [LapStokmController::class, 'exportLapStok'])->name('export-lapstok');
 
             Route::get('/laporan-barang', [LapBarangController::class, 'index'])->name('barang');
+            Route::get('/export-lapbarang', [LapBarangController::class, 'exportLapBarang'])->name('export-lapbarang');
         });
     });
 

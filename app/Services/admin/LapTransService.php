@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\Admin\LapTransRepository;
 
 class LapTransService {
@@ -9,6 +11,14 @@ class LapTransService {
 
     public function __construct(LapTransRepository $laptransRepository) {
         $this->laptransRepository = $laptransRepository;
+    }
+
+    private function LogActivity(string $activity) {
+        $this->laptransRepository->create([
+            'user_id' => Auth::id(),
+            'action' => 'Export',
+            'activity' => $activity,
+        ]);
     }
 
     public function getPaginatedLapTrans($filters = [], $perPage = 20) {
@@ -27,5 +37,14 @@ class LapTransService {
         }
         
         return $laptransacton;
+    }
+
+    public function exportLapTrans($filters = [])
+    {
+        $this->LogActivity('Mengekspor laporan transaksi ke PDF.');
+        $laptrans = $this->getPaginatedLapTrans($filters);
+        $pdf = Pdf::loadView('pages.export.transaksi-export', compact('laptrans'));
+
+        return $pdf->download('Laporan Stok.pdf');
     }
 }

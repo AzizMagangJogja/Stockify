@@ -17,6 +17,11 @@ class MinimumRepository {
     public function updateMinimum($minimum, array $data) {
         return $minimum->update($data);
     }
+
+    public function searchMinimum(string $keyword, $perPage = 20) {
+        return Products::where('name', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
+    }
 }
 
 class UserActivityRepository {

@@ -21,34 +21,42 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white dark:bg-gray-800">
-                                    @foreach ($stokMenipis as $tipis)
-                                    <tr>
-                                        <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
-                                            @if ($tipis->image)
-                                                <img src="{{ asset('storage/' . $tipis->image) }}" alt="{{ $tipis->name }}" class="w-16 h-16 object-cover rounded-lg mx-auto">
-                                            @else
-                                                <span class="text-gray-500 truncate" style="max-width: 150px;" title="{{ $tipis->image }}">{{ $tipis->image ?? 'Tidak Ada Foto' }}</span>
-                                            @endif
-                                        </td>
-                                        <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">{{ $tipis->name }}</td>
-                                        <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-white text-center align-middle">{{ $tipis->sku }}</td>
-                                        <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">{{ $tipis->quantity - $tipis->minimum_stock }}</td>
-                                        <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">
-                                            <div>
-                                                @if($tipis->quantity - $tipis->minimum_stock == 0)
-                                                    <span class="text-red-600 font-bold">Stok habis, segera Restock!</span><br>
-                                                    <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
-                                                @elseif($tipis->quantity - $tipis->minimum_stock < $tipis->minimum_stock)
-                                                    <span class="text-red-600 font-bold">Stok akan habis, segera Restock!</span><br>
-                                                    <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
+                                    @if ($stokMenipis->isEmpty())
+                                        <tr>
+                                            <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                                ~Tidak ada data stok menipis~
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach ($stokMenipis as $tipis)
+                                        <tr>
+                                            <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
+                                                @if ($tipis->image)
+                                                    <img src="{{ asset('storage/' . $tipis->image) }}" alt="{{ $tipis->name }}" class="w-16 h-16 object-cover rounded-lg mx-auto">
                                                 @else
-                                                    <span>Stok Menipis!</span><br>
-                                                    <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
+                                                    <span class="text-gray-500 truncate" style="max-width: 150px;" title="{{ $tipis->image }}">{{ $tipis->image ?? 'Tidak Ada Foto' }}</span>
                                                 @endif
-                                            </div>
-                                        </td>                                                                          
-                                    </tr>
-                                    @endforeach
+                                            </td>
+                                            <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">{{ $tipis->name }}</td>
+                                            <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-white text-center align-middle">{{ $tipis->sku }}</td>
+                                            <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">{{ $tipis->quantity - $tipis->minimum_stock }}</td>
+                                            <td class="p-4 text-sm font-normal text-gray-600 whitespace-nowrap dark:text-gray-400 text-center align-middle">
+                                                <div>
+                                                    @if($tipis->quantity - $tipis->minimum_stock == 0)
+                                                        <span class="text-red-600 font-bold">Stok habis, segera Restock!</span><br>
+                                                        <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
+                                                    @elseif($tipis->quantity - $tipis->minimum_stock < $tipis->minimum_stock)
+                                                        <span class="text-red-600 font-bold">Stok akan habis, segera Restock!</span><br>
+                                                        <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
+                                                    @else
+                                                        <span>Stok Menipis!</span><br>
+                                                        <span class="text-red-500 font-semibold">Stok Minimum: {{ $tipis->minimum_stock }}</span>
+                                                    @endif
+                                                </div>
+                                            </td>                                                                          
+                                        </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

@@ -30,4 +30,15 @@ class LapAktivitasController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat laporan aktivitas user!' . $error->getMessage());
         }
     }
+
+    public function exportLapAktivitas(Request $request)
+    {
+        try {
+            $filters = $request->only(['user_id', 'start_date', 'end_date', 'action']);
+            $useractivity = auth()->id();
+            return $this->lapaktivitasService->exportLapAktivitas($filters, $useractivity);
+        } catch (\Exception $error) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor: ' . $error->getMessage());
+        }
+    }
 }

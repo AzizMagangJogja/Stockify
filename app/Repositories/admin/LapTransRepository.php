@@ -2,9 +2,14 @@
 
 namespace App\Repositories\Admin;
 
+use App\Models\UserActivity;
 use App\Models\StockTransaction;
 
 class LapTransRepository {
+    public function create(array $data) {
+        return UserActivity::create($data);
+    }
+    
     public function paginateLapTrans($filters = [], $perPage = 20) {
         $query = StockTransaction::with(['product.category']);
 

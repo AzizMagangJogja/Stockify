@@ -2,10 +2,11 @@
 
 namespace App\Services\Admin;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
 use App\Repositories\Admin\ProductRepository;
 use App\Repositories\Admin\UserActivityRepository;
 use App\Repositories\Admin\StockTransactionRepository;
-use Illuminate\Support\Facades\Validator;
 
 class ProductService {
     protected $productRepository;
@@ -149,5 +150,51 @@ class ProductService {
 
     public function getProductById($id) {
         return $this->productRepository->findProductById($id);
+    }
+
+    public function searchProduct(string $keyword, $perPage = 20) {
+        return $this->productRepository->searchProduct($keyword, $perPage);
+    }
+
+    public function importProduct($file, $importClass) {
+        $this->productRepository->importProduct($file, $importClass);
+    
+        $products = $this->productRepository->getImportedProducts();
+    
+        foreach ($products as $product) {
+            $this->stockTransactionRepository->createTransaction([
+                'product_id' => $product->id,
+                'user_id' => auth()->id(),
+                'type' => 'Masuk',
+                'status' => 'Diterima',
+                'quantity' => $product->quantity,
+                'date' => now(),
+                'notes' => 'Tambah Produk',
+            ]);
+        }
+
+        $this->userActivityRepository->createActivity([
+            'user_id' => auth()->id(),
+            'action' => 'Import',
+            'activity' => 'Data excel: ' . $file->getClientOriginalName(),
+        ]);
+    }
+    
+
+    public function exportProduk(string $keyword = null)
+    {
+        $products = $keyword 
+            ? $this->productRepository->searchProduct($keyword)
+            : $this->productRepository->paginateProduct();
+
+        $pdf = Pdf::loadView('pages.export.prod-export', compact('products'));
+
+        $this->userActivityRepository->createActivity([
+            'user_id' => auth()->id(),
+            'action' => 'Export',
+            'activity' => 'Mengekspor data produk ke PDF'
+        ]);
+
+        return $pdf->download('Produk.pdf');
     }
 }

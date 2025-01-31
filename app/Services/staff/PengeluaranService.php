@@ -66,4 +66,8 @@ class PengeluaranService {
 
         return $keluar;
     }
+
+    public function searchPengeluaran(string $keyword, $perPage = 20) {
+        return $this->pengeluaranRepository->searchPengeluaran($keyword, $perPage);
+    }
 }

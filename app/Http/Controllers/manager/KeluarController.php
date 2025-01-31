@@ -18,9 +18,12 @@ class KeluarController extends Controller
         $this->keluarService = $keluarService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $keluar = $this->keluarService->getPaginatedKeluar();
+        $keyword = $request->get('search');
+        $keluar = $keyword 
+                ? $this->keluarService->searchKeluar($keyword) 
+                : $this->keluarService->getPaginatedKeluar();
         $product = Products::all();
         return view('pages.manager.stok.keluar', compact('keluar', 'product'));
     }

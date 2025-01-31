@@ -88,4 +88,8 @@ class CategoriesService {
 
         return $category;
     }
+
+    public function searchCategory(string $keyword, $perPage = 20) {
+        return $this->categoriesRepository->searchCategory($keyword, $perPage);
+    }
 }

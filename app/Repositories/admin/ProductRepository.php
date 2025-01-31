@@ -5,6 +5,7 @@ namespace App\Repositories\Admin;
 use App\Models\Products;
 use App\Models\UserActivity;
 use App\Models\StockTransaction;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductRepository {
     public function paginateProduct($perPage = 20) {
@@ -25,6 +26,22 @@ class ProductRepository {
 
     public function deleteProduct($product) {
         return $product->delete();
+    }
+
+    public function searchProduct(string $keyword, $perPage = 20) {
+        return Products::where('name', 'LIKE', "%{$keyword}%")
+            ->orWhere('sku', 'LIKE', "%{$keyword}%")
+            ->orWhere('description', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
+    }
+
+    public function importProduct($file, $importClass) {
+        Excel::import($importClass, $file);
+    }
+
+    public function getImportedProducts() {
+        return Products::where('created_at', '>=', now())
+                      ->get();
     }
 }
 

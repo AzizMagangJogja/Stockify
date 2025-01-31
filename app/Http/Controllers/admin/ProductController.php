@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Supplier;
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\ProductService;
 
@@ -15,9 +16,11 @@ class ProductController extends Controller {
         $this->productService = $productService;
     }
 
-    public function index() {
-        $product = $this->productService->getPaginatedProduct();
-
+    public function index(Request $request) {
+        $keyword = $request->get('search');
+        $product = $keyword 
+            ? $this->productService->searchProduct($keyword) 
+            : $this->productService->getPaginatedProduct();
         $category = Categories::all();
         $supplier = Supplier::all();
         
@@ -61,5 +64,27 @@ class ProductController extends Controller {
         } catch (\Exception $error) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $error->getMessage());
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $this->productService->importProduct($file, new ProductsImport);
+
+            return redirect()->back()->with('success', 'Data produk berhasil diimpor!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengimpor data produk: ' . $e->getMessage());
+        }
+    }
+
+    public function exportProduk(Request $request)
+    {
+        $keyword = $request->get('search');
+        return $this->productService->exportProduk($keyword);
     }
 }

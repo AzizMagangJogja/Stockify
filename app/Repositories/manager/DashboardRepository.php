@@ -25,6 +25,6 @@ class DashboardRepository
             $query->where('status', $status);
         }
 
-        return $query->get();
+        return $query->limit(10)->get();
     }
 }

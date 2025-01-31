@@ -14,4 +14,8 @@ class OpnameService {
     public function getPaginatedOpname($perPage = 20) {
         return $this->opnameRepository->paginateOpname($perPage);
     }
+
+    public function searchOpname(string $keyword, $perPage = 20) {
+        return $this->opnameRepository->searchOpname($keyword, $perPage);
+    }
 }

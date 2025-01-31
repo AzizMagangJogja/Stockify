@@ -134,6 +134,15 @@
                             </div>
                         </form>
                     </div>
+
+                    <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
+                        <a href="{{ route('manager.laporan.export-lapbarang', request()->only(['type', 'status', 'start_date', 'end_date'])) }}" class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                            <svg class="w-5 h-5 mr-2 -ml-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z" clip-rule="evenodd"/>
+                            </svg>
+                            Export
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,39 +168,47 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach($lapbarang as $index => $lapb)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ ($lapbarang->currentPage() - 1) * $lapbarang->perPage() + $index + 1 }}
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ \Carbon\Carbon::parse($lapb->updated_at)->locale('id')->translatedFormat('d F Y, H:i') }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->product->name }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->product->sku }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($lapb->type === 'Masuk')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
-                                        @elseif ($lapb->type === 'Keluar')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
-                                        @endif
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->product->minimum_stock }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->stok_masuk }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->stok_keluar }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->product->quantity - $lapb->product->minimum_stock }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($lapb->status === 'Pending')
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">Pending</span>
-                                        @elseif ($lapb->status === 'Diterima')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Diterima</span>
-                                        @elseif ($lapb->status === 'Ditolak')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Ditolak</span>
-                                        @elseif ($lapb->status === 'Dikeluarkan')
-                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">Dikeluarkan</span>
-                                        @endif
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->notes }}</td>
-                                </tr>
-                                @endforeach
+                                @if ($lapbarang->isEmpty())
+                                    <tr>
+                                        <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                            ~Tidak ada laporan~
+                                        </td>
+                                    </tr>
+                                @else 
+                                    @foreach($lapbarang as $index => $lapb)
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ ($lapbarang->currentPage() - 1) * $lapbarang->perPage() + $index + 1 }}
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ \Carbon\Carbon::parse($lapb->updated_at)->locale('id')->translatedFormat('d F Y, H:i') }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->product->name }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->product->sku }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($lapb->type === 'Masuk')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
+                                            @elseif ($lapb->type === 'Keluar')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
+                                            @endif
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->product->minimum_stock }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->stok_masuk }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->stok_keluar }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $lapb->product->quantity - $lapb->product->minimum_stock }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($lapb->status === 'Pending')
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">Pending</span>
+                                            @elseif ($lapb->status === 'Diterima')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Diterima</span>
+                                            @elseif ($lapb->status === 'Ditolak')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Ditolak</span>
+                                            @elseif ($lapb->status === 'Dikeluarkan')
+                                                <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">Dikeluarkan</span>
+                                            @endif
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $lapb->notes }}</td>
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

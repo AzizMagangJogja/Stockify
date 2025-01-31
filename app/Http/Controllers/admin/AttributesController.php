@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Products;
-use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\AttributeService;
@@ -17,9 +16,12 @@ class AttributesController extends Controller
         $this->attributeService = $productService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $attribute = $this->attributeService->getPaginatedAttribute();
+        $keyword = $request->get('search');
+        $attribute = $keyword 
+            ? $this->attributeService->searchAttribute($keyword) 
+            : $this->attributeService->getPaginatedAttribute();
         $product = Products::all();
     
         return view('pages.admin.produk.attribut', compact('attribute', 'product'));

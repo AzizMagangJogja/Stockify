@@ -25,6 +25,16 @@ class MasukRepository {
     public function deleteMasuk($masuk) {
         return $masuk->delete();
     }
+
+    public function searchMasuk(string $keyword, $perPage = 20) {
+        return StockTransaction::with(['product'])
+            ->where('type', 'Masuk')
+            ->where('status', 'Pending')
+            ->whereHas('product', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->paginate($perPage);
+    }     
 }
 
 class UserActivityRepository {

@@ -98,4 +98,8 @@ class SupplierService {
 
         return $supplier;
     }
+
+    public function searchSupplier(string $keyword, $perPage = 20) {
+        return $this->supplierRepository->searchSupplier($keyword, $perPage);
+    }
 }

@@ -28,4 +28,15 @@ class LapTransController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $error->getMessage());
         }
     }
+
+    public function exportLapTrans(Request $request)
+    {
+        try {
+            $filters = $request->only(['type', 'status', 'start_date', 'end_date', 'category_id']);
+
+            return $this->laptransService->exportLapTrans($filters);
+        } catch (\Exception $error) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor: ' . $error->getMessage());
+        }
+    }
 }

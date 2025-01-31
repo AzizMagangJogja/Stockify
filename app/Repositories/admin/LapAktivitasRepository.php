@@ -6,6 +6,18 @@ use App\Models\UserActivity;
 
 class LapAktivitasRepository {
     public function paginateLapAktivitas($filters = [], $perPage = 20) {
+        return $this->applyFilters($filters)->paginate($perPage);
+    }
+
+    public function getFilteredLapAktivitas($filters = []) {
+        return $this->applyFilters($filters)->get();
+    }
+
+    public function create(array $data) {
+        return UserActivity::create($data);
+    }
+
+    protected function applyFilters($filters = []) {
         $query = UserActivity::latest();
 
         if (!empty($filters['user_id'])) {
@@ -23,7 +35,7 @@ class LapAktivitasRepository {
         } elseif (!empty($filters['end_date'])) {
             $query->whereDate('created_at', '<=', $filters['end_date']);
         }
-        
-        return $query->paginate($perPage);
+
+        return $query;
     }
 }

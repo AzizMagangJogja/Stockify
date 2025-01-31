@@ -26,6 +26,13 @@ class ProdukRepository {
     public function deleteProduct($product) {
         return $product->delete();
     }
+
+    public function searchProduct(string $keyword, $perPage = 20) {
+        return Products::where('name', 'LIKE', "%{$keyword}%")
+            ->orWhere('sku', 'LIKE', "%{$keyword}%")
+            ->orWhere('description', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
+    }
 }
 
 class UserActivityRepository {

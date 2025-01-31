@@ -17,9 +17,11 @@ class ProdukController extends Controller
         $this->produkService = $produkService;
     }
 
-    public function index() {
-        $product = $this->produkService->getPaginatedProduct();
-
+    public function index(Request $request) {
+        $keyword = $request->get('search');
+        $product = $keyword 
+            ? $this->produkService->searchProduct($keyword) 
+            : $this->produkService->getPaginatedProduct();
         $category = Categories::all();
         $supplier = Supplier::all();
         
@@ -63,5 +65,11 @@ class ProdukController extends Controller
         } catch (\Exception $error) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $error->getMessage());
         }
+    }
+
+    public function exportProduk(Request $request)
+    {
+        $keyword = $request->get('search');
+        return $this->produkService->exportProduk($keyword);
     }
 }

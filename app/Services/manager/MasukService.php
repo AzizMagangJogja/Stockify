@@ -107,4 +107,8 @@ class MasukService {
     public function findMasukById($id) {
         return $this->masukRepository->findMasukById($id);
     }
+
+    public function searchMasuk(string $keyword, $perPage = 20) {
+        return $this->masukRepository->searchMasuk($keyword, $perPage);
+    }
 }

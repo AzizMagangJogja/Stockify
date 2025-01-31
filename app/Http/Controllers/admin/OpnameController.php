@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\OpnameService;
 
@@ -14,13 +15,16 @@ class OpnameController extends Controller
         $this->opnameService = $opnameService;
     }
 
-    public function index()
+    public function index(Request $request)
     { 
         try {
-            $opname = $this->opnameService->getPaginatedOpname();
+            $keyword = $request->get('search');
+            $opname = $keyword 
+                ? $this->opnameService->searchOpname($keyword) 
+                : $this->opnameService->getPaginatedOpname();
             return view('pages.admin.stok.opname', compact('opname'));
         } catch (\Exception $error) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data opname!' . $error->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $error->getMessage());
         }
     }
 }

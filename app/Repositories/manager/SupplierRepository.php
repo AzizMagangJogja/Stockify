@@ -16,4 +16,9 @@ class SupplierRepository {
     public function findSupplierById($id) {
         return Supplier::findOrFail($id);
     }
+
+    public function searchSupplier(string $keyword, $perPage = 20) {
+        return Supplier::where('name', 'LIKE', "%{$keyword}%")
+            ->paginate($perPage);
+    }
 }

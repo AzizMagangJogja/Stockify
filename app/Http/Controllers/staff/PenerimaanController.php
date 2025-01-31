@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Models\Products;
-use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Staff\PenerimaanService;
@@ -17,9 +16,12 @@ class PenerimaanController extends Controller
         $this->penerimaanService = $penerimaanService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $masuk = $this->penerimaanService->getPaginatedPenerimaan();
+        $keyword = $request->get('search');
+        $masuk = $keyword 
+                ? $this->penerimaanService->searchPenerimaan($keyword) 
+                : $this->penerimaanService->getPaginatedPenerimaan();
         $product = Products::all();
         return view('pages.staff.stok.penerimaan', compact('masuk', 'product'));
     }

@@ -15,9 +15,12 @@ class SupplierController extends Controller
         $this->supplierService = $supplierService;
     }
 
-    public function index()
+    public function index(Request $request)
     { 
-        $supplier = $this->supplierService->getPaginatedSupplier();
+        $keyword = $request->get('search');
+        $supplier = $keyword 
+                ? $this->supplierService->searchSupplier($keyword) 
+                : $this->supplierService->getPaginatedSupplier();
         return view('pages.admin.supplier', compact('supplier'));
     }
 

@@ -16,9 +16,12 @@ class MasukController extends Controller
         $this->masukService = $masukService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $masuk = $this->masukService->getPaginatedMasuk();
+        $keyword = $request->get('search');
+        $masuk = $keyword 
+                ? $this->masukService->searchMasuk($keyword) 
+                : $this->masukService->getPaginatedMasuk();
         $product = Products::all();
         return view('pages.manager.stok.masuk', compact('masuk', 'product'));
     }

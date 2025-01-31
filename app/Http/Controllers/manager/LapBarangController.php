@@ -21,4 +21,15 @@ class LapBarangController extends Controller
     
         return view('pages.manager.laporan.masuk_keluar', compact('filters', 'lapbarang'));
     }
+
+    public function exportLapBarang(Request $request)
+    {
+        try {
+            $filters = $request->only(['type', 'status', 'start_date', 'end_date']);
+
+            return $this->lapbarangService->exportLapBarang($filters);
+        } catch (\Exception $error) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor: ' . $error->getMessage());
+        }
+    }
 }

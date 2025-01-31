@@ -42,4 +42,8 @@ class MinimumService {
         }
         return $minimum;
     }
+
+    public function searchMinimum(string $keyword, $perPage = 20) {
+        return $this->minimumRepository->searchMinimum($keyword, $perPage);
+    }
 }

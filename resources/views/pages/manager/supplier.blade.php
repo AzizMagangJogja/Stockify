@@ -54,11 +54,11 @@
 
                 <div class="sm:flex">
                     <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-                        <form class="lg:pr-3" action="#" method="GET">
+                        <form class="lg:pr-3" action="{{ route('manager.supplier') }}" method="GET">
                             <label for="users-search" class="sr-only">Search</label>
                             <div class="relative mt-1 lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Data Supplier">
-                            </div>
+                            <input type="text" name="search" value="{{ request('search') }}" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Supplier" onkeydown="if (event.key === 'Enter') { this.form.submit(); }"/>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -79,14 +79,23 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                @if ($supplier->isEmpty())
+                                <tr>
+                                    <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                        ~Tidak ada data supplier~
+                                    </td>
+                                </tr>
+                            @else
                                 @foreach($supplier as $sup)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $sup->name }}</td>
                                     <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $sup->email }}</td>
                                     <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $sup->address }}</td>
                                     <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $sup->phone }}</td>
+                                    
                                 </tr>
                                 @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>

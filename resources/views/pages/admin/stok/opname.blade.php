@@ -53,11 +53,11 @@
                 </div>
                 <div class="sm:flex">
                     <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-                        <form class="lg:pr-3" action="#" method="GET">
+                        <form class="lg:pr-3" action="{{ route('admin.stock.opname') }}" method="GET">
                             <label for="users-search" class="sr-only">Search</label>
                             <div class="relative mt-1 lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Data Stok Opname">
-                            </div>
+                            <input type="text" name="search" value="{{ request('search') }}" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cari Data Stok Opname" onkeydown="if (event.key === 'Enter') { this.form.submit(); }"/>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -74,60 +74,68 @@
                                     <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Foto</th>
                                     <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Nama Produk</th>
                                     <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">SKU</th>
-                                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Stok</th>
+                                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Stok Opname</th>
                                     <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Transaksi Terakhir</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                @foreach($opname as $opn)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                        @if ($opn->image)
-                                            <img src="{{ asset('storage/' . $opn->image) }}" alt="{{ $opn->name }}" class="w-16 h-16 object-cover rounded-lg">
-                                        @else
-                                            <span class="text-gray-500 truncate" style="max-width: 150px;" title="{{ $opn->image }}">{{ $opn->image ?? 'Tidak Ada Foto' }}</span>
-                                        @endif
-                                    </td> 
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->name }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->sku }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->quantity - $opn->minimum_stock }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                        @if ($opn->transactions->isNotEmpty())
-                                            @php
-                                                $lastTransaction = $opn->transactions->last();
-                                            @endphp
-                                            <div>
-                                                <span>{{ $lastTransaction->type }} - </span> 
-                                                @if ($lastTransaction->status === 'Pending')
-                                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">
-                                                        Pending
-                                                    </span>
-                                                @elseif ($lastTransaction->status === 'Diterima')
-                                                    <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
-                                                        Diterima
-                                                    </span>
-                                                @elseif ($lastTransaction->status === 'Ditolak')
-                                                    <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">
-                                                        Ditolak
-                                                    </span>
-                                                @elseif ($lastTransaction->status === 'Dikeluarkan')
-                                                    <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">
-                                                        Dikeluarkan
-                                                    </span>
-                                                @endif
-                                                <br>
-                                                <small class="text-gray-500">
-                                                    {{ $lastTransaction->updated_at->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y, H:i') }}
-                                                </small>
-                                                <br>
-                                                <span class="text-sm text-gray-700">Kuantitas: {{ $lastTransaction->quantity }}</span>
-                                            </div>
-                                        @else
-                                            <span class="text-gray-500">~Tidak Ada Transaksi~</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
+                                @if ($opname->isEmpty())
+                                    <tr>
+                                        <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                            ~Tidak ada data opname~
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach($opname as $opn)
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                            @if ($opn->image)
+                                                <img src="{{ asset('storage/' . $opn->image) }}" alt="{{ $opn->name }}" class="w-16 h-16 object-cover rounded-lg">
+                                            @else
+                                                <span class="text-gray-500 truncate" style="max-width: 150px;" title="{{ $opn->image }}">{{ $opn->image ?? 'Tidak Ada Foto' }}</span>
+                                            @endif
+                                        </td> 
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->name }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->sku }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ $opn->quantity - $opn->minimum_stock }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                            @if ($opn->transactions->isNotEmpty())
+                                                @php
+                                                    $lastTransaction = $opn->transactions->last();
+                                                @endphp
+                                                <div>
+                                                    <span>{{ $lastTransaction->type }} - </span> 
+                                                    @if ($lastTransaction->status === 'Pending')
+                                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">
+                                                            Pending
+                                                        </span>
+                                                    @elseif ($lastTransaction->status === 'Diterima')
+                                                        <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
+                                                            Diterima
+                                                        </span>
+                                                    @elseif ($lastTransaction->status === 'Ditolak')
+                                                        <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">
+                                                            Ditolak
+                                                        </span>
+                                                    @elseif ($lastTransaction->status === 'Dikeluarkan')
+                                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-100 dark:border-gray-500">
+                                                            Dikeluarkan
+                                                        </span>
+                                                    @endif
+                                                    <br>
+                                                    <small class="text-gray-500">
+                                                        {{ $lastTransaction->updated_at->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y, H:i') }}
+                                                    </small>
+                                                    <br>
+                                                    <span class="text-sm text-gray-700">Kuantitas: {{ $lastTransaction->quantity }}</span>
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500">~Tidak Ada Transaksi~</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

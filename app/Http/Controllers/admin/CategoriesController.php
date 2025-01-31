@@ -13,9 +13,12 @@ class CategoriesController extends Controller {
         $this->categoriesService = $categoriesService;
     }
 
-    public function index()
+    public function index(Request $request)
     { 
-        $categories = $this->categoriesService->getPaginatedCategories();
+        $keyword = $request->get('search');
+        $categories = $keyword 
+            ? $this->categoriesService->searchCategory($keyword) 
+            : $this->categoriesService->getPaginatedCategories();
         return view('pages.admin.produk.kategori', compact('categories'));
     }
 

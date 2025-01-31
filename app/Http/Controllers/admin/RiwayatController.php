@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Services\Admin\RiwayatService;
 
 class RiwayatController extends Controller
@@ -14,12 +15,15 @@ class RiwayatController extends Controller
         $this->riwayatService = $riwayatService;
     }
 
-    public function index() {
+    public function index(Request $request) {
         try {
-            $stoktransaction = $this->riwayatService->getPaginatedRiwayat();
+            $keyword = $request->get('search');
+            $stoktransaction = $keyword 
+                ? $this->riwayatService->searchRiwayat($keyword) 
+                : $this->riwayatService->getPaginatedRiwayat();
             return view('pages.admin.stok.riwayat', compact('stoktransaction'));
         } catch (\Exception $error) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan:' . $error->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $error->getMessage());
         }
     }
 }

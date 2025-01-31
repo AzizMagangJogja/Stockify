@@ -122,7 +122,7 @@
             </div>
         
             <div class="flex justify-start mt-6">
-                <a href="{{ route('manager.produk.index') }}" class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">Kembali</a>
+                <a href="{{ route('admin.produk.produk.index') }}" class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">Kembali</a>
             </div>
         </div> 
     </div>

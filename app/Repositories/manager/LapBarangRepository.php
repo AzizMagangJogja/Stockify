@@ -2,9 +2,14 @@
 
 namespace App\Repositories\Manager;
 
+use App\Models\UserActivity;
 use App\Models\StockTransaction;
 
 class LapBarangRepository {
+    public function create(array $data) {
+        return UserActivity::create($data);
+    }
+    
     public function paginateLapBarang($filters = [], $perPage = 20) {
         $query = StockTransaction::with('product');
 

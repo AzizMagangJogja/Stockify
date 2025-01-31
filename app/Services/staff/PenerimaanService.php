@@ -66,4 +66,8 @@ class PenerimaanService {
 
         return $masuk;
     }
+
+    public function searchPenerimaan(string $keyword, $perPage = 20) {
+        return $this->penerimaanRepository->searchPenerimaan($keyword, $perPage);
+    }
 }

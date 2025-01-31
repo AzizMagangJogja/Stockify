@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Products;
 use Illuminate\Database\Seeder;
+use App\Models\StockTransaction;
 
 class DummyProductsSeeder extends Seeder
 {
@@ -197,7 +198,19 @@ class DummyProductsSeeder extends Seeder
         ];
 
         foreach($productsData as $key => $val) {
-            Products::create($val);
+            $product = Products::create($val);
+
+            StockTransaction::create([
+                'product_id' => $product->id,
+                'type' => 'Masuk',
+                'status' => 'Diterima',
+                'quantity' => $val['quantity'],
+                'user_id' => 1,
+                'date' => now(),
+                'notes'=>'Produk ditambah melalui seeder.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

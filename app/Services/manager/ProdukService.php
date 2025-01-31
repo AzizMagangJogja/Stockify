@@ -2,10 +2,11 @@
 
 namespace App\Services\Manager;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
 use App\Repositories\Manager\ProdukRepository;
 use App\Repositories\Manager\UserActivityRepository;
 use App\Repositories\Manager\StockTransactionRepository;
-use Illuminate\Support\Facades\Validator;
 
 class ProdukService {
     protected $produkRepository;
@@ -149,5 +150,26 @@ class ProdukService {
 
     public function getProductById($id) {
         return $this->produkRepository->findProductById($id);
+    }
+
+    public function searchProduct(string $keyword, $perPage = 20) {
+        return $this->produkRepository->searchProduct($keyword, $perPage);
+    }
+
+    public function exportProduk(string $keyword = null)
+    {
+        $products = $keyword 
+            ? $this->produkRepository->searchProduct($keyword)
+            : $this->produkRepository->paginateProduct();
+
+        $pdf = Pdf::loadView('pages.export.prod-export', compact('products'));
+
+        $this->userActivityRepository->createActivity([
+            'user_id' => auth()->id(),
+            'action' => 'Export',
+            'activity' => 'Mengekspor data produk ke PDF'
+        ]);
+
+        return $pdf->download('Produk.pdf');
     }
 }

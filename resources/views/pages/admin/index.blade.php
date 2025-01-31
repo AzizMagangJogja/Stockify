@@ -47,75 +47,79 @@
             <div class="flex items-center justify-between pb-6 border-gray-200 dark:border-gray-700">
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Grafik Stok Barang</h3>
             </div>
-  
-            @php
-                $totalQuantity = $grafikStok->sum(function ($product) {
-                    return max(0, $product->quantity - $product->minimum_stock);
-                });
-                $cumulativePercentage = 0;
-    
-                function generateSoftColor($index) {
-                    $hue = ($index * 137) % 360;
-                    return "hsl($hue, 100%, 65%)";
-                }
-            @endphp
-  
-            <div class="flex justify-center">
-                <svg viewBox="0 0 32 32" class="w-64 h-64">
-                    @foreach ($grafikStok as $index => $product)
-                        @php
-                            $adjustedQuantity = max(0, $product->quantity - $product->minimum_stock);
-                            $percentage = ($adjustedQuantity / $totalQuantity) * 100;
-                            $startAngle = $cumulativePercentage * 3.6;
-                            $endAngle = ($cumulativePercentage + $percentage) * 3.6;
-                            $largeArcFlag = $percentage > 50 ? 1 : 0;
-    
-                            $x1 = 16 + 15 * cos(deg2rad($startAngle));
-                            $y1 = 16 + 15 * sin(deg2rad($startAngle));
-                            $x2 = 16 + 15 * cos(deg2rad($endAngle));
-                            $y2 = 16 + 15 * sin(deg2rad($endAngle));
-    
-                            $cumulativePercentage += $percentage;
-    
-                            $color = generateSoftColor($index);
-                            $infoText = "{$product->name} - Kuantitas: {$adjustedQuantity} - " . number_format($percentage, 2) . "%";
-                        @endphp
-    
-                        <path d="M16 16 L {{ $x1 }} {{ $y1 }} A 15 15 0 {{ $largeArcFlag }} 1 {{ $x2 }} {{ $y2 }} Z" fill="{{ $color }}" stroke="#ffffff" stroke-width="0.1">
-                            <title>{{ $infoText }}</title>
-                        </path>
-                    @endforeach
-                    <circle cx="16" cy="16" r="8" fill="#ffffff" />
-                </svg>
-            </div>
-  
-            <div class="mt-8">
-                <div class="grid grid-cols-2 gap-4">
-                    @foreach ($grafikStok as $index => $product)
-                        @php
-                            $adjustedQuantity = max(0, $product->quantity - $product->minimum_stock);
-                            $percentage = ($adjustedQuantity / $totalQuantity) * 100;
-                            $color = generateSoftColor($index);
-                        @endphp
-                        <div class="flex items-center space-x-4">
-                            <span class="block w-6 h-6 rounded-full" style="background-color: {{ $color }};"></span>
-                            <div>
-                                <p class="text-base font-semibold text-gray-900 dark:text-gray-100">{{ $product->name }}</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    Kuantitas: {{ $adjustedQuantity }}
-                                    <span class="text-xs text-green-500">{{ number_format($percentage, 2) }}%</span>
-                                </p>
-                            </div>
-                        </div>
-                    @endforeach
+        
+            @if ($grafikStok->isEmpty())
+                <p class="text-center text-gray-500 dark:text-gray-400">~Tidak ada data stok barang~</p>
+            @else
+                @php
+                    $totalQuantity = $grafikStok->sum(function ($product) {
+                        return max(0, $product->quantity - $product->minimum_stock);
+                    });
+                    $cumulativePercentage = 0;
+        
+                    function generateSoftColor($index) {
+                        $hue = ($index * 137) % 360;
+                        return "hsl($hue, 100%, 65%)";
+                    }
+                @endphp
+        
+                <div class="flex justify-center">
+                    <svg viewBox="0 0 32 32" class="w-64 h-64">
+                        @foreach ($grafikStok as $index => $product)
+                            @php
+                                $adjustedQuantity = max(0, $product->quantity - $product->minimum_stock);
+                                $percentage = ($adjustedQuantity / $totalQuantity) * 100;
+                                $startAngle = $cumulativePercentage * 3.6;
+                                $endAngle = ($cumulativePercentage + $percentage) * 3.6;
+                                $largeArcFlag = $percentage > 50 ? 1 : 0;
+        
+                                $x1 = 16 + 15 * cos(deg2rad($startAngle));
+                                $y1 = 16 + 15 * sin(deg2rad($startAngle));
+                                $x2 = 16 + 15 * cos(deg2rad($endAngle));
+                                $y2 = 16 + 15 * sin(deg2rad($endAngle));
+        
+                                $cumulativePercentage += $percentage;
+        
+                                $color = generateSoftColor($index);
+                                $infoText = "{$product->name} - Kuantitas: {$adjustedQuantity} - " . number_format($percentage, 2) . "%";
+                            @endphp
+        
+                            <path d="M16 16 L {{ $x1 }} {{ $y1 }} A 15 15 0 {{ $largeArcFlag }} 1 {{ $x2 }} {{ $y2 }} Z" fill="{{ $color }}" stroke="#ffffff" stroke-width="0.1">
+                                <title>{{ $infoText }}</title>
+                            </path>
+                        @endforeach
+                        <circle cx="16" cy="16" r="8" fill="#ffffff" />
+                    </svg>
                 </div>
-            </div>
-        </div>
+        
+                <div class="mt-8">
+                    <div class="grid grid-cols-2 gap-4">
+                        @foreach ($grafikStok as $index => $product)
+                            @php
+                                $adjustedQuantity = max(0, $product->quantity - $product->minimum_stock);
+                                $percentage = ($adjustedQuantity / $totalQuantity) * 100;
+                                $color = generateSoftColor($index);
+                            @endphp
+                            <div class="flex items-center space-x-4">
+                                <span class="block w-6 h-6 rounded-full" style="background-color: {{ $color }};"></span>
+                                <div>
+                                    <p class="text-base font-semibold text-gray-900 dark:text-gray-100">{{ $product->name }}</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        Kuantitas: {{ $adjustedQuantity }}
+                                        <span class="text-xs text-green-500">{{ number_format($percentage, 2) }}%</span>
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        </div>        
   
         <div class="xl:col-span-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex flex-col">
             <div class="items-center justify-between lg:flex">
                 <div class="mb-4 lg:mb-0">
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Aktivitas User Hari ini</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Aktivitas User Hari Ini</h3>
                 </div>
             </div>
     
@@ -139,7 +143,7 @@
                                             <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $usav->user->name }}</td>
                                             <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($usav->updated_at)->locale('id')->translatedFormat('d F Y') }}</td>
                                             <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($usav->updated_at)->timezone('Asia/Jakarta')->format('H:i') }}</td>
-                                            <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                            <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
                                                 @if($usav->action == 'Login')
                                                     <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
                                                         Login

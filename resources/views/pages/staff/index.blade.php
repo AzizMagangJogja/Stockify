@@ -79,31 +79,39 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-800">
-                                @foreach($dashboard as $index => $dash)
-                                <tr>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $index + 1 }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">{{ $dash->product->name }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $dash->quantity }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($dash->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</td>
-                                    <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($dash->type === 'Masuk')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
-                                        @elseif ($dash->type === 'Keluar')
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
-                                        @endif
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">{{ $dash->status }}</span>
-                                    </td>
-                                    <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
-                                        @if ($dash->type === 'Masuk')
-                                            Periksa barang!
-                                        @elseif ($dash->type === 'Keluar')
-                                            Siapkan barang!
-                                        @endif
-                                    </td>                 
-                                </tr>
-                                @endforeach        
+                                @if ($dashboard->isEmpty())
+                                    <tr>
+                                        <td colspan="10" class="p-4 text-base font-normal text-gray-500 dark:text-white text-center align-middle">
+                                            ~Tidak ada barang masuk dan keluar~
+                                        </td>
+                                    </tr>
+                                @else 
+                                    @foreach($dashboard as $index => $dash)
+                                    <tr>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $index + 1 }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">{{ $dash->product->name }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">{{ $dash->quantity }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">{{ \Carbon\Carbon::parse($dash->created_at)->locale('id')->translatedFormat('d F Y, H:i') }}</td>
+                                        <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($dash->type === 'Masuk')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Masuk</span>
+                                            @elseif ($dash->type === 'Keluar')
+                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">Keluar</span>
+                                            @endif
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 border border-yellow-100 dark:border-yellow-500">{{ $dash->status }}</span>
+                                        </td>
+                                        <td class="p-4 text-base font-normal text-gray-500 whitespace-nowrap dark:text-white text-center align-middle">
+                                            @if ($dash->type === 'Masuk')
+                                                Periksa barang!
+                                            @elseif ($dash->type === 'Keluar')
+                                                Siapkan barang!
+                                            @endif
+                                        </td>                 
+                                    </tr>
+                                    @endforeach     
+                                @endif   
                             </tbody>
                         </table>
                     </div>

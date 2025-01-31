@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Models\Products;
-use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Staff\PengeluaranService;
@@ -17,9 +16,12 @@ class PengeluaranController extends Controller
         $this->pengeluaranService = $pengeluaranService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $keluar = $this->pengeluaranService->getPaginatedPengeluaran();
+        $keyword = $request->get('search');
+        $keluar = $keyword 
+                ? $this->pengeluaranService->searchPengeluaran($keyword) 
+                : $this->pengeluaranService->getPaginatedPengeluaran();
         $product = Products::all();
         return view('pages.staff.stok.pengeluaran', compact('keluar', 'product'));
     }

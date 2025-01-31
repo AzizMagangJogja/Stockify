@@ -19,6 +19,16 @@ class PengeluaranRepository {
     public function updatePengeluaran($keluar, array $data) {
         return $keluar->update($data);
     }
+
+    public function searchPengeluaran(string $keyword, $perPage = 20) {
+        return StockTransaction::with(['product'])
+            ->where('type', 'Keluar')
+            ->where('status', 'Pending')
+            ->whereHas('product', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->paginate($perPage);
+    } 
 }
 
 class UserActivityRepository {
