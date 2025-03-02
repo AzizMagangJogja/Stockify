@@ -3,7 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Repositories\Admin\AttributeRepository;
-use App\Repositories\Admin\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 use Illuminate\Support\Facades\Validator;
 
 class AttributeService {

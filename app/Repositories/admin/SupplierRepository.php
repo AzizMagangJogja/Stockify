@@ -3,7 +3,6 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Supplier;
-use App\Models\UserActivity;
 
 class SupplierRepository {
     public function paginateSupplier($perPage = 20) {
@@ -29,11 +28,5 @@ class SupplierRepository {
     public function searchSupplier(string $keyword, $perPage = 20) {
         return Supplier::where('name', 'LIKE', "%{$keyword}%")
             ->paginate($perPage);
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

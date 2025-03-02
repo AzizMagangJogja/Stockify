@@ -5,7 +5,7 @@ namespace App\Services\Manager;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\Manager\ProdukRepository;
-use App\Repositories\Manager\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 use App\Repositories\Manager\StockTransactionRepository;
 
 class ProdukService {

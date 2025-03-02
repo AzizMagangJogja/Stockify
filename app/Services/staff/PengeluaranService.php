@@ -4,7 +4,7 @@ namespace App\Services\Staff;
 
 use App\Models\Products;
 use App\Repositories\Staff\PengeluaranRepository;
-use App\Repositories\Staff\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 use Illuminate\Support\Facades\Validator;
 
 class PengeluaranService {
@@ -13,7 +13,7 @@ class PengeluaranService {
 
     public function __construct(
         PengeluaranRepository $pengeluaranRepository,
-        UserActivityRepository $userActivityRepository,
+        UserActivityRepository $userActivityRepository
     ) {
         $this->pengeluaranRepository = $pengeluaranRepository;
         $this->userActivityRepository = $userActivityRepository;
@@ -26,6 +26,10 @@ class PengeluaranService {
     public function updatePengeluaran($id, array $data) {
         $keluar = $this->pengeluaranRepository->findPengeluaranById($id);
 
+        if (!$keluar) {
+            throw new \Exception('Data pengeluaran tidak ditemukan!');
+        }
+
         $validator = Validator::make($data, [
             'status' => 'required|in:Diterima,Ditolak,Dikeluarkan',
             'notes' => 'nullable|string|max:255'
@@ -35,26 +39,29 @@ class PengeluaranService {
             throw new \Exception(implode(', ', $validator->errors()->all()));
         }
 
-        if ($data['status'] === 'Dikeluarkan') {
-            $product = Products::find($keluar->product_id);
+        $product = Products::find($keluar->product_id);
 
-            if ($product->quantity >= $keluar->quantity) {
-                $product->quantity -= $keluar->quantity;
-                $product->save();
-            } else {
+        if (!$product) {
+            throw new \Exception('Produk tidak ditemukan!');
+        }
+
+        if ($data['status'] === 'Dikeluarkan') {
+            if ($product->quantity < $keluar->quantity) {
                 throw new \Exception('Stok tidak mencukupi!');
             }
+
+            $product->decrement('quantity', $keluar->quantity);
         }
 
         $oldKeluar = clone $keluar;
         $this->pengeluaranRepository->updatePengeluaran($keluar, $data);
 
         $changes = [];
-        if ($oldKeluar->status != $data['status']) {
+        if ($oldKeluar->status !== $data['status']) {
             $changes[] = 'status dari "' . $oldKeluar->status . '" ke "' . $data['status'] . '"';
         }
-        if ($oldKeluar->notes != $data['notes']) {
-            $changes[] = 'catatan dari "' . $oldKeluar->notes . '" ke "' . $data['notes'] . '"';
+        if ($oldKeluar->notes !== $data['notes']) {
+            $changes[] = 'catatan dari "' . ($oldKeluar->notes ?? '-') . '" ke "' . ($data['notes'] ?? '-') . '"';
         }
 
         $activityDetails = $changes ? implode(', ', $changes) : 'tidak ada perubahan';

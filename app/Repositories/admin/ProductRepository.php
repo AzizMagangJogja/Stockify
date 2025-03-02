@@ -3,7 +3,6 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Products;
-use App\Models\UserActivity;
 use App\Models\StockTransaction;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -42,12 +41,6 @@ class ProductRepository {
     public function getImportedProducts() {
         return Products::where('created_at', '>=', now())
                       ->get();
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }
 

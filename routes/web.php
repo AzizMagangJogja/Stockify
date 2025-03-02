@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\OpnameController;
 use App\Http\Controllers\Admin\LapStokController;
 use App\Http\Controllers\Admin\MinimumController;

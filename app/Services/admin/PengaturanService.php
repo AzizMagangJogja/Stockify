@@ -4,7 +4,7 @@ namespace App\Services\Admin;
 
 use Illuminate\Http\Request;
 use App\Repositories\Admin\PengaturanRepository;
-use App\Repositories\Admin\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 
 class PengaturanService {
     protected $pengaturanRepository;

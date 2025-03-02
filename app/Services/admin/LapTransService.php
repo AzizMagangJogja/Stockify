@@ -45,6 +45,6 @@ class LapTransService {
         $laptrans = $this->getPaginatedLapTrans($filters);
         $pdf = Pdf::loadView('pages.export.transaksi-export', compact('laptrans'));
 
-        return $pdf->download('Laporan Stok.pdf');
+        return $pdf->download('Laporan Transaksi.pdf');
     }
 }

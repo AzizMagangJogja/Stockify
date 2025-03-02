@@ -3,7 +3,6 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Setting;
-use App\Models\UserActivity;
 
 class PengaturanRepository {
     public function getFirstPengaturan() {
@@ -14,11 +13,5 @@ class PengaturanRepository {
         $pengaturan = Setting::findOrFail($id);
         $pengaturan->update($data);
         return $pengaturan;
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

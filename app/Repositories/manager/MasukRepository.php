@@ -36,9 +36,3 @@ class MasukRepository {
             ->paginate($perPage);
     }     
 }
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
-    }
-}

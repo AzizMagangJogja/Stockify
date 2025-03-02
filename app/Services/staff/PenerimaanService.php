@@ -4,7 +4,7 @@ namespace App\Services\Staff;
 
 use App\Models\Products;
 use App\Repositories\Staff\PenerimaanRepository;
-use App\Repositories\Staff\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 use Illuminate\Support\Facades\Validator;
 
 class PenerimaanService {
@@ -35,15 +35,14 @@ class PenerimaanService {
             throw new \Exception(implode(', ', $validator->errors()->all()));
         }
 
-        if ($data['status'] === 'Diterima') {
-            $product = Products::find($masuk->product_id);
+        $product = Products::find($masuk->product_id);
+        if (!$product) {
+            throw new \Exception('Produk tidak ditemukan');
+        }
 
-            if ($product) {
-                $product->quantity += $masuk->quantity;
-                $product->save();
-            } else {
-                throw new \Exception('Produk tidak ditemukan');
-            }
+        if ($data['status'] === 'Diterima') {
+            $product->quantity += $masuk->quantity;
+            $product->save();
         }
         
         $oldMasuk = clone $masuk;

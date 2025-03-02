@@ -3,7 +3,6 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Categories;
-use App\Models\UserActivity;
 
 class CategoriesRepository {
     public function paginateCategories($perPage = 20) {
@@ -30,11 +29,5 @@ class CategoriesRepository {
         return Categories::where('name', 'LIKE', "%{$keyword}%")
             ->orWhere('description', 'LIKE', "%{$keyword}%")
             ->paginate($perPage);
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

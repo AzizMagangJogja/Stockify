@@ -3,7 +3,6 @@
 namespace App\Repositories\Manager;
 
 use App\Models\Products;
-use App\Models\UserActivity;
 use App\Models\StockTransaction;
 
 class ProdukRepository {
@@ -32,12 +31,6 @@ class ProdukRepository {
             ->orWhere('sku', 'LIKE', "%{$keyword}%")
             ->orWhere('description', 'LIKE', "%{$keyword}%")
             ->paginate($perPage);
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }
 

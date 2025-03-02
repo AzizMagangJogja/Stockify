@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Manager;
 
-use App\Models\UserActivity;
 use App\Models\StockTransaction;
 
 class KeluarRepository {
@@ -34,11 +33,5 @@ class KeluarRepository {
                 $query->where('name', 'LIKE', "%{$keyword}%");
             })
             ->paginate($perPage);
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

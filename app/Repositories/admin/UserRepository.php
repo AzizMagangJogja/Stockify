@@ -3,7 +3,6 @@
 namespace App\Repositories\Admin;
 
 use App\Models\User;
-use App\Models\UserActivity;
 
 class UserRepository {
     public function paginateUser($perPage = 20) {
@@ -24,11 +23,5 @@ class UserRepository {
 
     public function deleteUser($user) {
         return $user->delete();
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

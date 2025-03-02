@@ -3,7 +3,7 @@
 namespace App\Services\Manager;
 
 use App\Repositories\Manager\KeluarRepository;
-use App\Repositories\Manager\UserActivityRepository;
+use App\Repositories\UserActivityRepository;
 use Illuminate\Support\Facades\Validator;
 
 class KeluarService {

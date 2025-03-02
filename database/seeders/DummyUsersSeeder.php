@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DummyUsersSeeder extends Seeder
@@ -16,20 +15,20 @@ class DummyUsersSeeder extends Seeder
         $userData=[
             [
                 'id'=>'1',
-                'name'=>'Aryo',
-                'email'=>'aryo@gmail.com',
+                'name'=>'Admin',
+                'email'=>'admin@gmail.com',
                 'password'=>bcrypt('123456'),
                 'role'=>'admin'
             ], [
                 'id'=>'2',
-                'name'=>'Anjar',
-                'email'=>'anjar@gmail.com',
+                'name'=>'Manajer',
+                'email'=>'manager@gmail.com',
                 'password'=>bcrypt('123456'),
                 'role'=>'manager'
             ], [
                 'id'=>'3',
-                'name'=>'Suryo',
-                'email'=>'suryo@gmail.com',
+                'name'=>'Staff',
+                'email'=>'staff@gmail.com',
                 'password'=>bcrypt('123456'),
                 'role'=>'staff'
             ] 

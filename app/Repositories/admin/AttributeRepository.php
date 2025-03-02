@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Admin;
 
-use App\Models\UserActivity;
 use App\Models\ProductAttributes;
 
 class AttributeRepository {
@@ -33,11 +32,5 @@ class AttributeRepository {
                 $query->where('name', 'LIKE', "%{$keyword}%");
             })
             ->paginate($perPage);
-    }
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Staff;
 
-use App\Models\UserActivity;
 use App\Models\StockTransaction;
 
 class PenerimaanRepository {
@@ -29,10 +28,4 @@ class PenerimaanRepository {
             })
             ->paginate($perPage);
     } 
-}
-
-class UserActivityRepository {
-    public function createActivity(array $data) {
-        return UserActivity::create($data);
-    }
 }
